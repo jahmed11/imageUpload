@@ -9,8 +9,8 @@ const config = {
   bucketName: "my-bucket147",
   dirName: "media",
   region: "ap-south-1",
-  accessKeyId: process.env.accessKeyId,
-  secretAccessKey: process.env.secretAccessKey,
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey,
 };
 const ButtonDiv = styled.div`
   text-align: center;

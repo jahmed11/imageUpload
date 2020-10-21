@@ -7,7 +7,7 @@ const initialState = {
       type: "text",
       placeholder: "firstName",
       name: "firstName",
-      value: "ali",
+      value: "",
     },
     lastName: {
       type: "text",

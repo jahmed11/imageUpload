@@ -7,7 +7,7 @@ import * as actionCreators from "../../store/actions/form";
 import { uploadFile } from "react-s3";
 const config = {
   bucketName: "my-bucket147",
-  dirName: "media" /* optional */,
+  dirName: "media",
   region: "ap-south-1",
   accessKeyId: process.env.accessKeyId,
   secretAccessKey: process.env.secretAccessKey,

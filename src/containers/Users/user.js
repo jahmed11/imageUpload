@@ -16,7 +16,7 @@ const Users = () => {
     //getting user data from dynamoDB
     axios
       .get(
-        "https://tsrhzalmek.execute-api.ap-south-1.amazonaws.com/test/users/1122"
+        "https://tsrhzalmek.execute-api.ap-south-1.amazonaws.com/test/users/"
       )
       .then((res) => {
         setData(res.data);

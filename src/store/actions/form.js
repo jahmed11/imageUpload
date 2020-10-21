@@ -16,6 +16,9 @@ export const formSubmit = (first, last, email) => {
       last,
       email,
     };
-    //axios.post( user);
+    axios.post(
+      "https://tsrhzalmek.execute-api.ap-south-1.amazonaws.com/test/users/",
+      user
+    );
   };
 };

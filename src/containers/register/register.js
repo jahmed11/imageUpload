@@ -4,7 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import ImageUpload from "../../components/addImage";
 import styled from "styled-components";
 import * as actionCreators from "../../store/actions/form";
-import axios from "axios";
+import { uploadFile } from "react-s3";
+const config = {
+  bucketName: "my-bucket147",
+  dirName: "media" /* optional */,
+  region: "ap-south-1",
+  accessKeyId: "AKIA5SSWI7PXTFQT7YWM",
+  secretAccessKey: "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",
+};
 const ButtonDiv = styled.div`
   text-align: center;
   margin-top: 10px;
@@ -12,13 +19,16 @@ const ButtonDiv = styled.div`
     width: 350px;
   }
 `;
-
+const Form = styled.div`
+  margin-top: 100px;
+`;
 const Register = () => {
   const [file, setFile] = useState();
   const [preview, setPreview] = useState();
 
   const form = useSelector((state) => state.forms);
   const dispatch = useDispatch();
+  const postRequest = useDispatch();
   let elements = [];
   for (let key in form) {
     elements.push({
@@ -36,14 +46,12 @@ const Register = () => {
     }
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
-    console.log(file);
     fileReader.onload = () => {
       setPreview(fileReader.result);
     };
   }, [file]);
   const imageUploaded = useCallback(
     (event) => {
-      console.log(event.target.files);
       if (event.target.files && event.target.files.length === 1) {
         const image = event.target.files[0];
         console.log(image, "image");
@@ -52,30 +60,27 @@ const Register = () => {
     },
     [setFile]
   );
+
   const formSubmitted = (event) => {
     event.preventDefault();
-    const form_data = new FormData();
-    form_data.append(`firstName`, form.firstName.value);
-    form_data.append("lasttName", form.lastName.value);
-    form_data.append("email", form.email.value);
-    form_data.append("image", file, file.name);
-    console.log(form_data.keys());
-    const userData = {
-      id: "1452",
-      firstName: "Junaid",
-      lastName: "Ahmed",
-    };
-    axios
-      .post(
-        "https://tsrhzalmek.execute-api.ap-south-1.amazonaws.com/test/users",
-        JSON.stringify(userData)
-      )
-      .then((response) => console.log(response.data))
+
+    //uplaoding file to S3 bucket
+    uploadFile(file, config)
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
+
+    //sending data to dynamoDB using lambda function
+    postRequest(
+      actionCreators.formSubmit(
+        form.firstName.value,
+        form.lastName.value,
+        form.email.value
+      )
+    );
   };
   return (
     <>
-      <form onSubmit={formSubmitted}>
+      <Form onSubmit={formSubmitted}>
         <ImageUpload preview={preview} imageUploaded={imageUploaded} />
         {elements.map((item) => {
           return (
@@ -94,7 +99,7 @@ const Register = () => {
             Submit
           </button>
         </ButtonDiv>
-      </form>
+      </Form>
     </>
   );
 };

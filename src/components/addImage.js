@@ -14,7 +14,6 @@ const ImageUploaded = styled.img`
 `;
 
 const ImageUpload = (props) => {
-  console.log(props);
   const filePicker = useRef();
 
   return (
